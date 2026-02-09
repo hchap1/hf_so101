@@ -1,0 +1,10 @@
+# Hand Detection Requirements
+# Install with: pip install -r requirements_hand_detection.txt
+
+# Core dependencies (Updated for new MediaPipe API)
+mediapipe>=0.10.8
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Optional but recommended for better performance
+opencv-contrib-python>=4.8.0  # Additional OpenCV features
