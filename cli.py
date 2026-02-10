@@ -26,7 +26,12 @@ class Controller:
                 sleep(duration)
             elif command == "get": print(self.arm.format_arm_state_for_ai())
             elif command == "set":
-                _ = self.arm.set_position_cm(parameters[0], parameters[1], parameters[2])
+                _ = self.arm.set_position_cm(
+                    parameters[0], parameters[1], parameters[2],
+                    wrist_pitch_deg=parameters[3],
+                    roll=parameters[4],
+                    claw=parameters[5]
+                )
 
 if __name__ == "__main__":
     controller = Controller()

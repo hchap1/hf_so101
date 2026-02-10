@@ -156,7 +156,7 @@ class ArmController:
     def format_arm_state_for_ai(self) -> str:
         state = self.get_position_cm()
         return (
-            "Arm state (all units in cm or degrees):\n"
+            "\n\nBEGIN POSITION OUTPUT:\nArm state (all units in cm or degrees):\n"
             f"X: {state['x'] * 100:.2f}  -> horizontal, +right\n"
             f"Y: {state['y'] * 100:.2f}  -> vertical, +up (ground ≈ -3)\n"
             f"Z: {state['z'] * 100:.2f}  -> forward, +forward\n"
@@ -175,7 +175,7 @@ class ArmController:
         claw: float = 0.5
     ) -> Dict[str, float]:
         
-        yaw, shoulder, elbow, wrist = inverse_kinematics(x, y, z, wrist_pitch_deg)
+        yaw, shoulder, elbow, wrist = inverse_kinematics(-x, y, z, wrist_pitch_deg)
         
         positions = {
             "yaw": yaw,
