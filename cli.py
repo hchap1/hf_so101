@@ -13,9 +13,12 @@ class Controller:
         self.arm = ArmController()
 
     def add(self, command: str):
-        self.commands.append(command)
+        for command in command.split(", "): self.commands.append(command)
 
-    def run(self):
+    def run(self) -> str:
+
+        output = ""
+
         for string in self.commands:
 
             command = string.split(" ")[0]
@@ -24,7 +27,7 @@ class Controller:
             if command == "sleep":
                 duration = parameters[0]
                 sleep(duration)
-            elif command == "get": print(self.arm.format_arm_state_for_ai())
+            elif command == "get": output += self.arm.format_arm_state_for_ai() + "\n"
             elif command == "set":
                 _ = self.arm.set_position_cm(
                     parameters[0], parameters[1], parameters[2],
@@ -35,25 +38,7 @@ class Controller:
 
             else:
                 with open("help.txt", "r") as help:
-                    print(help.read())
-
-def run_commands_capture_stdout(command_string: str) -> str:
-    controller = Controller()
-
-    # Split by ', ' and add commands
-    for cmd in command_string.split(", "):
-        controller.add(cmd)
-
-    # Capture stdout
-    buffer = io.StringIO()
-    with contextlib.redirect_stdout(buffer):
-        controller.run()
-
-    return buffer.getvalue()
-
-if __name__ == "__main__":
-    controller = Controller()
-    arguments = " ".join(sys.argv[1:]).split(", ")
-    for argument in arguments:
-        controller.add(argument)
-    controller.run()
+                    output += help.read()
+                
+        self.commands.clear()
+        return output

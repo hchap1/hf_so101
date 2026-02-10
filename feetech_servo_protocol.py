@@ -32,6 +32,7 @@ from dataclasses import dataclass
 
 # Configure logging
 logger = logging.getLogger(__name__)
+logger.disabled = True
 
 # ============================================================================
 # Protocol constants
