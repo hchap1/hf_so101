@@ -1,0 +1,108 @@
+SYSTEM OVERVIEW
+---------------
+This program exposes a simple comma-separated command-line interface to control a 6-DOF robotic arm.
+Commands are executed strictly in order. There is no concurrency, interpolation, or safety checking.
+The agent is fully responsible for issuing physically valid commands.
+
+Each command is a single instruction.
+Multiple commands are separated by ", " (comma + space).
+All numeric values are REQUIRED and positional.
+
+Example invocation:
+python3 my_app.py set 8 -2 17 -80 0.5 0.8, sleep 1.0, get
+
+
+AVAILABLE COMMANDS
+------------------
+
+1) set X Y Z WRIST_PITCH ROLL CLAW
+
+Moves the arm to a Cartesian target, solving inverse kinematics to place the *claw tip*.
+
+Parameters:
+- X (cm): horizontal position
+  + right, - left
+
+- Y (cm): vertical position
+  + up, - down
+  ground level ≈ 0
+
+- Z (cm): forward position
+  + forward, - backward
+
+- WRIST_PITCH (degrees):
+  Orientation of the claw relative to the world
+  0   = horizontal
+  -120 = straight down
+
+- ROLL (0.0–1.0):
+  Axial rotation of the claw
+  0.5 ≈ neutral
+
+- CLAW (0.0–1.0):
+  Gripper position
+  0.0 = fully closed
+  0.7 = fully open
+
+Behavior:
+- Uses full 3D inverse kinematics
+- Automatically computes yaw, shoulder, elbow, and wrist
+- If the target is unreachable, it will clamp to the nearest reachable pose
+- No collision checking is performed
+
+
+2) get
+
+Reads the current arm state using forward kinematics and prints it.
+
+Output meaning:
+- X: horizontal claw-tip position (cm), +right
+- Y: vertical claw-tip position (cm), +up
+- Z: forward claw-tip position (cm), +forward
+- WristPitch: claw orientation in degrees
+- Roll: claw axial rotation (normalized)
+- Claw: gripper openness (normalized)
+
+This represents the *actual* inferred pose, not the last commanded pose.
+
+
+3) sleep SECONDS
+
+Pauses execution for the given duration.
+
+Parameters:
+- SECONDS (float): time to wait
+
+Behavior:
+- Blocking delay
+- Used to allow the arm time to physically move before issuing the next command
+
+
+COMMAND EXECUTION RULES
+-----------------------
+- Commands execute sequentially, in order
+- All parameters must be provided
+- No named arguments
+- No units conversion inside commands (always cm and degrees)
+- Errors will raise exceptions and stop execution
+- The arm is assumed to start wherever it physically is
+
+
+IMPORTANT NOTES FOR AGENTS
+--------------------------
+- Always use sleep between large movements
+- Avoid sudden large Z decreases near the ground
+- Wrist pitch does NOT change position; do not compensate for it manually
+- The system does not enforce joint limits beyond basic reachability
+- Assume gravity, inertia, and real-world delays exist
+- When attempting to grab an object, ALWAYS stop above it, with the claw open, and wait for at least a second before then dipping down and closing the claw.
+
+
+SUMMARY
+-------
+You control the arm by issuing:
+- set  -> move the claw tip
+- get  -> read current claw state
+- sleep -> wait
+
+Everything else is your responsibility.
