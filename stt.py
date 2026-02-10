@@ -12,8 +12,8 @@ _audio_queue = queue.Queue()
 MODEL_PATH = "vosk_model"
 model = vosk.Model(MODEL_PATH)
 
-def listen_until_silence(samplerate: int = 16000, silence_threshold: float = 500, 
-                         silence_duration: float = 1.0, max_recording: float = 30.0) -> str:
+def listen_until_silence(samplerate: int = 16000, silence_threshold: float = 200, 
+                         silence_duration: float = 2.0, max_recording: float = 30.0) -> str:
     """
     Records audio until silence is detected and returns recognized speech as a string.
     

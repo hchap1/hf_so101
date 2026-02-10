@@ -14,6 +14,7 @@ class Controller:
 
     def add(self, command: str):
         for command in command.split(", "): self.commands.append(command)
+        print(self.commands)
 
     def run(self) -> str:
 
