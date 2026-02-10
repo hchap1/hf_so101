@@ -33,6 +33,24 @@ class Controller:
                     claw=parameters[5]
                 )
 
+            else:
+                with open("help.txt", "r") as help:
+                    print(help.read())
+
+def run_commands_capture_stdout(command_string: str) -> str:
+    controller = Controller()
+
+    # Split by ', ' and add commands
+    for cmd in command_string.split(", "):
+        controller.add(cmd)
+
+    # Capture stdout
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        controller.run()
+
+    return buffer.getvalue()
+
 if __name__ == "__main__":
     controller = Controller()
     arguments = " ".join(sys.argv[1:]).split(", ")

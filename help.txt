@@ -97,7 +97,6 @@ IMPORTANT NOTES FOR AGENTS
 - Assume gravity, inertia, and real-world delays exist
 - When attempting to grab an object, ALWAYS stop above it, with the claw open, and wait for at least a second before then dipping down and closing the claw.
 
-
 SUMMARY
 -------
 You control the arm by issuing:
