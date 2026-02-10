@@ -152,6 +152,18 @@ class ArmController:
     
     def __init__(self, follower_port: str = FOLLOWER_PORT, update_rate: int = 100):
         self.follower: FollowerArm = FollowerArm(follower_port, update_rate=update_rate, use_sync_write=True)
+
+    def format_arm_state_for_ai(self) -> str:
+        state = self.get_position_cm()
+        return (
+            "Arm state (all units in cm or degrees):\n"
+            f"X: {state['x'] * 100:.2f}  -> horizontal, +right\n"
+            f"Y: {state['y'] * 100:.2f}  -> vertical, +up (ground ≈ -3)\n"
+            f"Z: {state['z'] * 100:.2f}  -> forward, +forward\n"
+            f"WristPitch: {state['wrist_pitch_deg']:.1f}° -> claw tilt, 0=horizontal, +up\n"
+            f"Roll: {state['roll']:.2f} -> claw roll, 0.5=center\n"
+            f"Claw: {state['claw']:.2f} -> gripper, 0=closed, 1=open"
+        )
         
     def set_position(
         self,
@@ -218,6 +230,3 @@ class ArmController:
             "roll": pos["roll"],
             "claw": pos["claw"],
         }
-
-arm = ArmController()
-print(arm.get_position_cm())
