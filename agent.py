@@ -160,7 +160,7 @@ class ArmController:
             f"X: {state['x'] * 100:.2f}  -> horizontal, +right\n"
             f"Y: {state['y'] * 100:.2f}  -> vertical, +up (ground ≈ -3)\n"
             f"Z: {state['z'] * 100:.2f}  -> forward, +forward\n"
-            f"WristPitch: {state['wrist_pitch_deg']:.1f}° -> claw tilt, 0=horizontal, +up\n"
+            f"WristPitch: {state['wrist_pitch_deg']:.1f}° -> claw tilt, 0=horizontal, -120=down\n"
             f"Roll: {state['roll']:.2f} -> claw roll, 0.5=center\n"
             f"Claw: {state['claw']:.2f} -> gripper, 0=closed, 1=open"
         )
